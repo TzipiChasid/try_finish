@@ -1,0 +1,36 @@
+name: 🐍 Create Python Release
+
+on:
+  push:
+    tags:
+    - 'v*'
+
+    
+jobs:
+  build:
+    name: Upload Python Release Asset
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: 📂 Checkout code
+        uses: actions/checkout@v2
+
+      - name: 🔵 Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.11'  
+
+      - name: 🔖 Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          draft: false
+          prerelease: false
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
